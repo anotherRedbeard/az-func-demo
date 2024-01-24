@@ -15,12 +15,12 @@ namespace azure.demo
     {
 
         private readonly TaskProperties _taskProperties;
-        private readonly ILogger _logger;
+        private TaskLogger _taskLogger;
 
-        public PipelineTaskHandler(TaskProperties taskProperties, ILogger logger)
+
+        public PipelineTaskHandler(TaskProperties taskProperties)
         {
             _taskProperties = taskProperties;
-            _logger = logger;
         }
 
         public async Task<TaskResult> Execute(ILogger log, CancellationToken cancellationToken)
@@ -31,9 +31,11 @@ namespace azure.demo
 
             try
             {
+                // create timeline record if not provided
+                _taskLogger = new TaskLogger(_taskProperties, taskClient);
 
                 // Step #2: Send a status update to Azure Pipelines that the check started
-                _logger.LogInformation("Check started!");
+                await _taskLogger.LogImmediately("Check started!");
 
                 //get build id
                 var buildId = _taskProperties.MessageProperties["buildid"];
@@ -47,7 +49,7 @@ namespace azure.demo
                 // connect to api to look for template names
                 using (var client = new HttpClient())
                 {
-                    _logger.LogInformation($"Checking for required templates");
+                    _taskLogger.LogImmediately($"Connecting to Azure DevOps API to check for required templates");
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Convert.ToBase64String(Encoding.ASCII.GetBytes($":{_taskProperties.AuthToken}")));
 
@@ -60,26 +62,26 @@ namespace azure.demo
 
 
                 // Step #5: Send a status update with the result of the search
-                _logger.LogInformation($"All templates were found to be present: {allTemplatesFound}");
+                _taskLogger.LogImmediately($"All templates were found to be present: {allTemplatesFound}");
                 taskResult = allTemplatesFound ? TaskResult.Succeeded : TaskResult.Failed;
                 return await Task.FromResult(taskResult);
             }
             catch (Exception e)
             {
-                if (_logger != null)
+                if (_taskLogger != null)
                 {
                     if (e is VssServiceException)
                     {
-                        _logger.LogError(e, "Make sure task's Completion event is set to Callback!");
+                        await _taskLogger.Log("\n Make sure task's Completion event is set to Callback!").ConfigureAwait(false);
                     }
-                    _logger.LogError(e, "Error occurred while executing the task.");
+                    await _taskLogger.Log(e.ToString()).ConfigureAwait(false);
                 }
             }
             finally
             {
-                if (_logger != null)
+                if (_taskLogger != null)
                 {
-                    _logger.LogInformation("Check completed!");
+                    await _taskLogger.End().ConfigureAwait(false);
                 }
 
                 // Step #6: Send a check decision to Azure Pipelines

@@ -38,7 +38,7 @@ namespace azure.demo
             // Created task execution handler
             Task.Run(() =>
             {
-                var executionHandler = new PipelineTaskHandler(taskProperties, _logger);
+                var executionHandler = new PipelineTaskHandler(taskProperties);
                 _ = executionHandler.Execute(_logger, CancellationToken.None).Result;
             });
 
