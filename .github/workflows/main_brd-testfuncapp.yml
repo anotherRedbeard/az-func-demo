@@ -29,8 +29,8 @@ jobs:
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: bash
         run: |
-          cd src
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          cd src
           dotnet build --configuration Release --output ./output
           popd
       
@@ -40,5 +40,5 @@ jobs:
         with:
           app-name: 'brd-testfuncapp'
           slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_84D22DD3A35845BBA467A9C4C2D71819 }}
