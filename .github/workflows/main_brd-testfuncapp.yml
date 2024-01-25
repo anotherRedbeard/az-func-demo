@@ -38,7 +38,7 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: 'brd-testfuncapp'
+          app-name: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_84D22DD3A35845BBA467A9C4C2D71819 }}
