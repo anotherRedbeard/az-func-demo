@@ -13,9 +13,9 @@ To run this example, you need the following:
 ## Deploy to Azure
 
 1. Create a new or use an existing Azure Function in the Azure Portal
-   a. I created an function app using the Linux Operating System. You can find steps on how to create an azure function in the portal [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal#create-a-function-app).
+   1. I created an function app using the Linux Operating System. You can find steps on how to create an azure function in the portal [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal#create-a-function-app).
 2. Deploy this project to the Azure Function you are using from step 1.
-   a. You can do this locally by running the following Functions Core Tools command `func azure functionapp publish <funcation-app-name>` or you can use the [pipeline that has been included in this repo](.github/workflows/main_brd-testfuncapp.yml).
+   1. You can do this locally by running the following Functions Core Tools command `func azure functionapp publish <funcation-app-name>` or you can use the [pipeline that has been included in this repo](.github/workflows/main_brd-testfuncapp.yml).
       1. You will want to add the following variables and secrets to your github `Secrets and variables` Setting under Security:  `var.AZURE_FUNCTIONAPP_NAME` and `secrets.AZUREAPPSERVICE_PUBLISHPROFILE_84D22DD3A35845BBA467A9C4C2D71819`
       2. The variable `AZURE_FUNCTIONAPP_NAME` is the name of the function app you created above.
       3. The secret `AZUREAPPSERVICE_PUBLISHPROFILE_84D22DD3A35845BBA467A9C4C2D71819` is the publish profile that you will need to create from the Function apps ['Deployment Center'](https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings?tabs=portal#ftps-deployment-settings)
