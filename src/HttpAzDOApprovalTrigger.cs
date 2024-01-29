@@ -43,7 +43,7 @@ namespace azure.demo
             });
 
             // Step #1: Confirms the receipt of the check payload
-            return new OkObjectResult("Request accepted!");
+            return new OkObjectResult("Request received and accepted!");
         }
 
         private TaskProperties GetTaskProperties(HttpHeadersCollection requestHeaders)

@@ -15,8 +15,8 @@ To run this example, you need the following:
 1. Create a new or use an existing Azure Function in the Azure Portal
    1. I created an function app using the Linux Operating System. You can find steps on how to create an azure function in the portal [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal#create-a-function-app).
 2. Deploy this project to the Azure Function you are using from step 1.
-   1. You can do this locally by running the following Functions Core Tools command `func azure functionapp publish <funcation-app-name>` or you can use the [pipeline that has been included in this repo](.github/workflows/main_brd-testfuncapp.yml).
-      1. You will want to add the following variables and secrets to your github `Secrets and variables` Setting under Security:  `var.AZURE_FUNCTIONAPP_NAME` and `secrets.AZURE_FUNCTIONAPP_CREDS`
+   1. You can do this locally by running the following Functions Core Tools command `func azure functionapp publish <funcation-app-name>` or you can use the [GitHub (GH) action](.github/workflows/main_brd-testfuncapp.yml) that has been included in this repo.  If you'd like to use the GH action, please follow the steps below:
+      1. You will want to add the following variables and secrets to your github `Secrets and Variables` Setting under Security:  `var.AZURE_FUNCTIONAPP_NAME` and `secrets.AZURE_FUNCTIONAPP_CREDS`
       2. The variable `AZURE_FUNCTIONAPP_NAME` is the name of the function app you created above.
       3. The secret `AZURE_FUNCTIONAPP_CREDS` is an Role-Based Access Control (RBAC) with a client id and secret that you can use to have access to deploy your function app to Azure.  This is done by creating a new or using an existing service principal.
          1. You will need to create a new client_id and secret on an existing or new service principal.
@@ -26,7 +26,7 @@ To run this example, you need the following:
                 az ad sp create-for-rbac --name myServicePrincipalName1 --role reader --scopes /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRG1
               ```
 
-      4. Yaml pipeline that is using these variables and secrets:
+      4. This is the section of the GH action that is using these variables and secrets:
 
       ```yaml
         - name: 'Login via Azure CLI'
@@ -92,7 +92,7 @@ Follow these instructions to use this example as an `Invoke Azure Function` chec
         }
         ```
 
-        Don't forget to add `"BuildId": "$(Build.BuildId)"`, otherwise your Azure Function check will not work
+        Don't forget to add `"BuildId": "$(Build.BuildId)"` and `"RequiredTemplates":"sandbox-job.yaml"`, otherwise your Azure Function check will not work
    4. In the _Advanced_ section, choose _Callback_ as completion event. This makes the check run asynchronously
    5. In the _Control options_ section: 
       1. Set _Time between evaluations (minutes)_ to 0
@@ -102,7 +102,7 @@ Follow these instructions to use this example as an `Invoke Azure Function` chec
 
 To see your Invoke Azure Function check in action, follow these steps:
 
-1. Create a new YAML pipeline with the following code. Make sure to replace the `project_name` and `repo_name` with your values:
+1. Create a new YAML pipeline with the following code. Make sure to replace the `project_name` and `repo_name` with your values. In this example I'm using a template named `sandbox-job.yaml`, but you can use any name you want for your template.  Just make sure that you make the appropriate changes above in the headers section of the AzDO check:
 
   **./main-pipeline.yaml:**
 
