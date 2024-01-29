@@ -16,19 +16,31 @@ To run this example, you need the following:
    1. I created an function app using the Linux Operating System. You can find steps on how to create an azure function in the portal [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal#create-a-function-app).
 2. Deploy this project to the Azure Function you are using from step 1.
    1. You can do this locally by running the following Functions Core Tools command `func azure functionapp publish <funcation-app-name>` or you can use the [pipeline that has been included in this repo](.github/workflows/main_brd-testfuncapp.yml).
-      1. You will want to add the following variables and secrets to your github `Secrets and variables` Setting under Security:  `var.AZURE_FUNCTIONAPP_NAME` and `secrets.AZUREAPPSERVICE_PUBLISHPROFILE_84D22DD3A35845BBA467A9C4C2D71819`
+      1. You will want to add the following variables and secrets to your github `Secrets and variables` Setting under Security:  `var.AZURE_FUNCTIONAPP_NAME` and `secrets.AZURE_FUNCTIONAPP_CREDS`
       2. The variable `AZURE_FUNCTIONAPP_NAME` is the name of the function app you created above.
-      3. The secret `AZUREAPPSERVICE_PUBLISHPROFILE_84D22DD3A35845BBA467A9C4C2D71819` is the publish profile that you will need to create from the Function apps ['Deployment Center'](https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings?tabs=portal#ftps-deployment-settings)
+      3. The secret `AZURE_FUNCTIONAPP_CREDS` is an Role-Based Access Control (RBAC) with a client id and secret that you can use to have access to deploy your function app to Azure.  This is done by creating a new or using an existing service principal.
+         1. You will need to create a new client_id and secret on an existing or new service principal.
+            - Here is the command to create the new service principal
+
+              ```# Bash script
+                az ad sp create-for-rbac --name myServicePrincipalName1 --role reader --scopes /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myRG1
+              ```
+
+      4. Yaml pipeline that is using these variables and secrets:
 
       ```yaml
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_FUNCTIONAPP_CREDS }}
+
         - name: 'Run Azure Functions Action'
           uses: Azure/functions-action@v1
           id: fa
           with:
-          app-name: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'
-          slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_84D22DD3A35845BBA467A9C4C2D71819 }}
+            app-name: '${{ vars.AZURE_FUNCTIONAPP_NAME }}'
+            slot-name: ''
+            package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/src/output'
       ```
 
 ## Individual Functions
