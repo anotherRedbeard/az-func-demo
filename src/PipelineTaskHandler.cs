@@ -37,6 +37,12 @@ namespace azure.demo
                 // Step #2: Send a status update to Azure Pipelines that the check started
                 await _taskLogger.LogImmediately("Check started!");
 
+                //log all _taskProperties.MessageProperties
+                foreach (var property in _taskProperties.MessageProperties)
+                {
+                    await _taskLogger.LogImmediately($"{property.Key} = {property.Value}");
+                }
+
                 //get build id
                 var buildId = _taskProperties.MessageProperties["buildid"];
 
