@@ -49,9 +49,10 @@ namespace azure.demo
                 // connect to api to look for template names
                 using (var client = new HttpClient())
                 {
-                    _taskLogger.LogImmediately($"Connecting to Azure DevOps API to check for required templates");
+                    await _taskLogger.LogImmediately($"Connecting to Azure DevOps API to check for required templates");
 
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Convert.ToBase64String(Encoding.ASCII.GetBytes($":{_taskProperties.AuthToken}")));
+                    await _taskLogger.LogImmediately($"token={_taskProperties.AuthToken}");
 
                     var url = $"{_taskProperties.PlanUri}{_taskProperties.ProjectId}/_apis/build/builds/{buildId}/logs/2?api-version=6.0";
                     var response = await client.GetStringAsync(url);
@@ -62,7 +63,7 @@ namespace azure.demo
 
 
                 // Step #5: Send a status update with the result of the search
-                _taskLogger.LogImmediately($"All templates were found to be present: {allTemplatesFound}");
+                await _taskLogger.LogImmediately($"All templates were found to be present: {allTemplatesFound}");
                 taskResult = allTemplatesFound ? TaskResult.Succeeded : TaskResult.Failed;
                 return await Task.FromResult(taskResult);
             }

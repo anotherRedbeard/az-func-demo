@@ -72,8 +72,8 @@ Follow these instructions to use this example as an `Invoke Azure Function` chec
 
 1. In your Azure Pipelines, create a new [`Environment`](https://learn.microsoft.com/azure/devops/pipelines/process/environments) called _Sandbox_ with no resources
 2. Add a Check of type `Invoke Azure Function` to _Sandbox_ with the following configuration:
-   1. _Azure function URL_: the URL of the Azure Function deployed in Step 1, for example, https://azurefunctionbasichandler.azurewebsites.net/api/MyBasicFunction. You can get this URL using _Copy Function Url_ in Visual Studio Code
-   2. _Function key_: a secret used to access the Azure Function, for example, the value of the _code_ query parameter after you do _Copy Function Url_ in Visual Studio Code
+   1. _Azure function URL_: the URL of the Azure Function deployed in Step 1, for example, https://azurefunctionbasichandler.azurewebsites.net/api/MyBasicFunction. You can get this URL using _Copy Function Url_ in Visual Studio Code. Make sure you are using just the url with the function name, you will not need the `?code=<function_key>` part here.
+   2. _Function key_: a secret used to access the Azure Function, for example, the value of the _code_ query parameter after you do _Copy Function Url_ in Visual Studio Code. This is where you would use the value of the key from the `?code=<function_key>`.
    3. _Headers_:
 
         ```json
