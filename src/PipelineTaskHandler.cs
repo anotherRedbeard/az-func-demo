@@ -37,12 +37,6 @@ namespace azure.demo
                 // Step #2: Send a status update to Azure Pipelines that the check started
                 await _taskLogger.LogImmediately("Check started!");
 
-                //log all _taskProperties.MessageProperties
-                foreach (var property in _taskProperties.MessageProperties)
-                {
-                    await _taskLogger.LogImmediately($"{property.Key} = {property.Value}");
-                }
-
                 //get build id
                 var buildId = _taskProperties.MessageProperties["buildid"];
 
@@ -61,6 +55,7 @@ namespace azure.demo
                     await _taskLogger.LogImmediately($"token={_taskProperties.AuthToken}");
 
                     var url = $"{_taskProperties.PlanUri}{_taskProperties.ProjectId}/_apis/build/builds/{buildId}/logs/2?api-version=6.0";
+                    //await _taskLogger.LogImmediately($"url={url}");
                     var response = await client.GetStringAsync(url);
 
                     // look in response for template names and set a variable to true if they are all found
