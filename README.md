@@ -15,7 +15,7 @@ To run this example, you need the following:
 1. Create a new or use an existing Azure Function in the Azure Portal
    1. I created an function app using the Linux Operating System. You can find steps on how to create an azure function in the portal [here](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal#create-a-function-app).
 2. Deploy this project to the Azure Function you are using from step 1.
-   1. You can do this locally by running the following Functions Core Tools command `func azure functionapp publish <funcation-app-name>` or you can use the [GitHub (GH) action](.github/workflows/main_brd-testfuncapp.yml) that has been included in this repo.  If you'd like to use the GH action, please follow the steps below:
+   1. You can do this locally by running the following Functions Core Tools command `func azure functionapp publish <funcation-app-name>  --dotnet-version 8.0` or you can use the [GitHub (GH) action](.github/workflows/main_brd-testfuncapp.yml) that has been included in this repo.  If you'd like to use the GH action, please follow the steps below:
       1. You will want to add the following variables and secrets to your github `Secrets and Variables` Setting under Security:  `var.AZURE_FUNCTIONAPP_NAME` and `secrets.AZURE_FUNCTIONAPP_CREDS`
       2. The variable `AZURE_FUNCTIONAPP_NAME` is the name of the function app you created above.
       3. The secret `AZURE_FUNCTIONAPP_CREDS` is an Role-Based Access Control (RBAC) with a client id and secret that you can use to have access to deploy your function app to Azure.  This is done by creating a new or using an existing service principal.
