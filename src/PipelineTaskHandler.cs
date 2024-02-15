@@ -51,7 +51,7 @@ namespace azure.demo
                 {
                     await _taskLogger.LogImmediately($"Connecting to Azure DevOps API to check for required templates");
 
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Convert.ToBase64String(Encoding.ASCII.GetBytes($":{_taskProperties.AuthToken}")));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($":{_taskProperties.AuthToken}")));
                     await _taskLogger.LogImmediately($"token={_taskProperties.AuthToken}");
 
                     var url = $"{_taskProperties.PlanUri}{_taskProperties.ProjectId}/_apis/build/builds/{buildId}/logs/2?api-version=6.0";
